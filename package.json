@@ -1,0 +1,26 @@
+{
+  "name": "tool",
+  "version": "1.0.0",
+  "description": "convenience and simple Library for JavaScript",
+  "main": "_Tool.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tangdingga1/_Tool.git"
+  },
+  "keywords": [
+    "JavaScript",
+    "Tool"
+  ],
+  "author": "tang",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tangdingga1/_Tool/issues"
+  },
+  "homepage": "https://github.com/tangdingga1/_Tool#readme",
+  "devDependencies": {
+    "eslint": "^6.0.1"
+  }
+}
