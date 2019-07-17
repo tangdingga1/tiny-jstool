@@ -28,47 +28,61 @@
         isUndefined: function(target) { return typeof target === 'undefined'; },
         isNaN: function(target) { return typeof (target === 'number') && (target !== target); },
         isNull: function(target) { return typeof (target === 'object') && (target + 1) === 1; },
-        // object
+        // object type
         isFunction: function(target) { return typeof target === 'function'; },
-        isArray: function(target) { Object.prototype.toString.call(target) === '[object Array]'; },
-        isObject: function(target) { Object.prototype.toString.call(target) === '[object Object]'; }
+        isArray: function(target) { return Object.prototype.toString.call(target) === '[object Array]'; },
+        isObject: function(target) { return Object.prototype.toString.call(target) === '[object Object]'; }
     };
 
-    /** lifeCycle class decorator way
-     * 
+    /** lifeCycleDecorator
+     * @param {function} handler 需要进行生命周期装饰的函数，最后一个参数将被添加为生命周期之间互相传递的数值
+     * @param {object|function} lifeConfig 生命周期函数设置 如果为obejct { before, after, error }，均传递function， 如果为function，表示回调，第一个参数为err
+     * @param {any} that 函数执行需要绑定的作用域，不传递默认为window
      * 
       */
-    _ToolProtype.lifeCycleDecorator = function(handler) {
+    _ToolProtype.lifeCycleDecorator = function(handler, lifeConfig, that) {
         var isFunction = this.testType.isFunction;
-        var isObject = this.testType.object;
+        if (!isFunction(handler)) {
+            throw new Error('you should pass function on first argument');
+        }
+        var isObject = this.testType.isObject;
+        // placeholder function
+        var onHandlerBefore = voidFunction;
+        var onHandlerAfter = voidFunction;
+        var onError = voidFunction;
+        var error = null;
+        // 传递的参数,用于传递保存生命周期函数返回值
+        var passValueObject = {
+            before: null,
+            after: null,
+            error: null,
+            handler: null,
+        };
+        // 生命周期总是最后参数的最后一项
+        if (!lifeConfig) {
+            throw new Error('you should pass function or object on second argument');
+        }
+        // 如果最后一个参数为函数，那就是直接传入一个callback的errorFirst模式
+        if (isFunction(lifeConfig)) {
+            onHandlerAfter = lifeConfig;
+        // 如果是配置的object，那么拆分对应的配置参数
+        } else if (isObject(lifeConfig)) {
+            lifeConfig.before && (onHandlerBefore = lifeConfig.before);
+            lifeConfig.after && (onHandlerAfter = lifeConfig.after);
+            lifeConfig.error && (onError = lifeConfig.error);
+        }
         return function() {
-            // placeholder function
-            var onHandlerBefore = voidFunction;
-            var onHandlerAfter = voidFunction;
-            var onError = voidFunction;
-            var error = null;
-            // 生命周期总是最后参数的最后一项
-            var lifeConfig = this.arguments.length > 1 && this.arguments.slice(-1);
-            if (!lifeConfig) return handler;
-            // 如果最后一个参数为函数，那就是直接传入一个callback的errorFirst模式
-            if (isFunction(lifeConfig)) {
-                onHandlerAfter = lifeConfig;
-            // 如果是配置的object，那么拆分对应的配置参数
-            } else if (isObject(lifeConfig)) {
-                lifeConfig.before && (onHandlerBefore = lifeConfig.before);
-                lifeConfig.after && (onHandlerAfter = lifeConfig.after);
-                lifeConfig.error && (onError = lifeConfig.error);
-            }
             // before
-            onHandlerBefore();
+            passValueObject.before = onHandlerBefore();
+            var arrArguments = Array.prototype.slice.call(arguments);
             // handler
             try {
-                handler.apply(this, this.arguments);
+                passValueObject.handler = handler.apply(that || environment, arrArguments.concat(passValueObject));
             } catch (e) {
                 error = e;
-                onError(error);
+                passValueObject.error = onError(error, passValueObject);
             } finally {
-                onHandlerAfter(onError);
+                onHandlerAfter(error, passValueObject);
             }
         };
     };
