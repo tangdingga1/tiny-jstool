@@ -1,18 +1,18 @@
-(function(environment) {
+function _tool(environment) {
     // test for run environment
-    if (!environment.document || environment._Tool) {
-        throw new Error('you can\'t use _Tool beacuse you run it on node or _Tool alreay exits');
+    if (environment._Tool) {
+        throw new Error('you can\'t use _Tool beacuse  _Tool alreay exits');
     }
 
     /** Variable list
      * @variable {object} _ToolProtype _Tool原型
      */
     var _ToolProtype = Object.create(null);
-    var voidFunction = function() {};
-    
+    var voidFunction = function () { };
+
     // @todo 想一个拆分模块的方法
     function _Tool() {
-        this._use = function() {
+        this._use = function () {
 
         };
     }
@@ -22,25 +22,24 @@
 
     _ToolProtype.testType = {
         // basic type
-        isString: function(target) { return typeof target === 'string'; },
-        isNumber: function(target) { return typeof target === 'number'; },
-        isBool: function(target) { return typeof target === 'boolean'; },
-        isUndefined: function(target) { return typeof target === 'undefined'; },
-        isNaN: function(target) { return typeof (target === 'number') && (target !== target); },
-        isNull: function(target) { return typeof (target === 'object') && (target + 1) === 1; },
+        isString: function (target) { return typeof target === 'string'; },
+        isNumber: function (target) { return typeof target === 'number'; },
+        isBool: function (target) { return typeof target === 'boolean'; },
+        isUndefined: function (target) { return typeof target === 'undefined'; },
+        isNaN: function (target) { return typeof (target === 'number') && (target !== target); },
+        isNull: function (target) { return typeof (target === 'object') && (target + 1) === 1; },
         // object type
-        isFunction: function(target) { return typeof target === 'function'; },
-        isArray: function(target) { return Object.prototype.toString.call(target) === '[object Array]'; },
-        isObject: function(target) { return Object.prototype.toString.call(target) === '[object Object]'; }
+        isFunction: function (target) { return typeof target === 'function'; },
+        isArray: function (target) { return Object.prototype.toString.call(target) === '[object Array]'; },
+        isObject: function (target) { return Object.prototype.toString.call(target) === '[object Object]'; }
     };
 
     /** lifeCycleDecorator
      * @param {function} handler 需要进行生命周期装饰的函数，最后一个参数将被添加为生命周期之间互相传递的数值
      * @param {object|function} lifeConfig 生命周期函数设置 如果为obejct { before, after, error }，均传递function， 如果为function，表示回调，第一个参数为err
      * @param {any} that 函数执行需要绑定的作用域，不传递默认为window
-     * 
       */
-    _ToolProtype.lifeCycleDecorator = function(handler, lifeConfig, that) {
+    _ToolProtype.lifeCycleDecorator = function (handler, lifeConfig, that) {
         var isFunction = this.testType.isFunction;
         if (!isFunction(handler)) {
             throw new Error('you should pass function on first argument');
@@ -65,13 +64,13 @@
         // 如果最后一个参数为函数，那就是直接传入一个callback的errorFirst模式
         if (isFunction(lifeConfig)) {
             onHandlerAfter = lifeConfig;
-        // 如果是配置的object，那么拆分对应的配置参数
+            // 如果是配置的object，那么拆分对应的配置参数
         } else if (isObject(lifeConfig)) {
             lifeConfig.before && (onHandlerBefore = lifeConfig.before);
             lifeConfig.after && (onHandlerAfter = lifeConfig.after);
             lifeConfig.error && (onError = lifeConfig.error);
         }
-        return function() {
+        return function () {
             // before
             passValueObject.before = onHandlerBefore();
             var arrArguments = Array.prototype.slice.call(arguments);
@@ -97,7 +96,7 @@
     _ToolProtype.copy = function (copyText, callBack) {
         var type = typeof copyText;
         if (!document.execCommand) {
-            callBack({err : 'you should update your browser'});
+            callBack({ err: 'you should update your browser' });
         }
         // type test
         if (type !== 'number' || type !== 'string') {
@@ -112,10 +111,18 @@
         callBack(null);
     };
 
-
-
     // init tools
     environment._Tool = new _Tool();
+    environment._tool && delete environment._tool;
     return environment._Tool;
+}
 
-})(window || global);
+// for commonJS and es6 module
+(function (global, _tool) {
+    if (typeof module === 'object' && typeof module.exports === 'object') {
+        module.exports = _tool(global);
+    } else {
+        _tool(global);
+    }
+    // Pass this if window is not defined yet
+})(typeof window !== 'undefined' ? window : this, _tool);
