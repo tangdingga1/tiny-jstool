@@ -6,20 +6,18 @@ function _tool(environment) {
 
     /** Variable list
      * @variable {object} _ToolProtype _Tool原型
+     * @variable {function} voidFunction 空函数 用于置空占位
+     * @variable {<array string>} modules 自带的模块
+     * @variable {object} moduleFunctions 模块相关用到的函数
      */
     var _ToolProtype = Object.create(null);
     var voidFunction = function () { };
 
-    // @todo 想一个拆分模块的方法
     function _Tool() {
-        this._use = function () {
 
-        };
     }
 
-    // define _Tool prototype
-    _Tool.prototype = _ToolProtype;
-
+    // common
     _ToolProtype.testType = {
         // basic type
         isString: function (target) { return typeof target === 'string'; },
@@ -33,6 +31,9 @@ function _tool(environment) {
         isArray: function (target) { return Object.prototype.toString.call(target) === '[object Array]'; },
         isObject: function (target) { return Object.prototype.toString.call(target) === '[object Object]'; }
     };
+
+    // define _Tool prototype
+    _Tool.prototype = _ToolProtype;
 
     /** lifeCycleDecorator
      * @param {function} handler 需要进行生命周期装饰的函数，最后一个参数将被添加为生命周期之间互相传递的数值
@@ -73,7 +74,7 @@ function _tool(environment) {
         return function () {
             // before
             passValueObject.before = onHandlerBefore();
-            var arrArguments = Array.prototype.slice.call(arguments);
+            var arrArguments = Array.from(arguments);
             // handler
             try {
                 passValueObject.handler = handler.apply(that || environment, arrArguments.concat(passValueObject));
@@ -86,36 +87,103 @@ function _tool(environment) {
         };
     };
 
-
-
-    // useful simple tools
-    /**
-     * @param {string|number} copyText - 需要复制的内容
-     * @param {function} callBack - 回调函数，如果出现错误，第一个为参数存在
-      */
-    _ToolProtype.copy = function (copyText, callBack) {
-        var type = typeof copyText;
-        if (!document.execCommand) {
-            callBack({ err: 'you should update your browser' });
-        }
-        // type test
-        if (type !== 'number' || type !== 'string') {
-            copyText += '';
-        }
-        var input = document.createElement('input');
-        document.body.appendChild(input);
-        input.setAttribute('value', copyText);
-        input.select();
-        document.execCommand('copy');
-        document.body.removeChild(input);
-        callBack(null);
+    // module extends
+    // 自带的模块接收字符串
+    _ToolProtype.extends = function () {
+        var extendPrototype = {};
+        var testType = this.testType;
+        Array.from(arguments).map(function (module) {
+            // 自定义拓展对象
+            var extendObject = {};
+            if (testType.isObject(module)) {
+                extendObject = module;
+                // 自带的模块
+            } else if (testType.isFunction(_ToolProtype.defaultModules[module])) {
+                extendObject = _ToolProtype.defaultModules[module]() || {};
+            }
+            extendPrototype = Object.assign(extendPrototype, extendObject);
+        });
+        // 更新 environment 上面 _Tool的protype
+        Object.setPrototypeOf(environment._Tool, Object.assign(extendPrototype, _ToolProtype));
     };
+
+    // default modules
+    _ToolProtype.defaultModules = {
+        dom: dom,
+        polyfill: polyfill,
+    };
+
+    // dom module
+    function dom() {
+        if (!environment.document) {
+            throw new Error('document not exits, dom module needs document');
+        }
+        var _ToolDom = {};
+        /**
+         * copyToClipBoard 复制内容到剪贴板
+         * @param {string|number} copyText - 需要复制的内容
+         * @param {function} callBack - 回调函数，如果出现错误，第一个为参数存在
+         */
+        _ToolDom.copyToClipBoard = function (copyText, callBack) {
+            var type = typeof copyText;
+            if (!document.execCommand) {
+                callBack({ err: 'you should update your browser' });
+            }
+            // type test
+            if (type !== 'number' || type !== 'string') {
+                copyText += '';
+            }
+            var input = document.createElement('input');
+            document.body.appendChild(input);
+            input.setAttribute('value', copyText);
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
+            callBack(null);
+        };
+        return _ToolDom;
+    }
+
+    /**
+     * polyfill module
+     * objectAssign
+     * arrayArrayFrom
+    */
+    function polyfill() {
+        
+        function objectAssign() {
+            var returnObject = {};
+            Array.from(arguments).forEach(function (objects) {
+                if (_ToolProtype.testType.isObject(objects)) {
+                    for (var keys in objects) {
+                        returnObject[keys] = objects[keys];
+                    }
+                } else {
+                    throw new TypeError('argument is not object');
+                }
+            });
+            return returnObject;
+        }
+
+        function arrayArrayFrom() {
+            Array.from = function (target) {
+                return Array.prototype.slice.call(target);
+            };
+        }
+
+        // run polyfill
+        Object.assign || objectAssign();
+        Array.from || arrayArrayFrom();
+        return {};
+    }
 
     // init tools
     environment._Tool = new _Tool();
     environment._tool && delete environment._tool;
     return environment._Tool;
 }
+
+
 
 // for commonJS and es6 module
 (function (global, _tool) {
@@ -124,5 +192,4 @@ function _tool(environment) {
     } else {
         _tool(global);
     }
-    // Pass this if window is not defined yet
-})(typeof window !== 'undefined' ? window : this, _tool);
+})(typeof window !== 'undefined' ? window : this || {}, _tool);
