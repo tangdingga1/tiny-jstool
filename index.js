@@ -7,15 +7,11 @@ function _tool(environment) {
     /** Variable list
      * @variable {object} _ToolProtype _Tool原型
      * @variable {function} voidFunction 空函数 用于置空占位
-     * @variable {<array string>} modules 自带的模块
-     * @variable {object} moduleFunctions 模块相关用到的函数
      */
     var _ToolProtype = Object.create(null);
     var voidFunction = function () { };
 
-    function _Tool() {
-
-    }
+    function _Tool() {}
 
     // common
     _ToolProtype.testType = {
@@ -97,14 +93,16 @@ function _tool(environment) {
             var extendObject = {};
             if (testType.isObject(module)) {
                 extendObject = module;
-                // 自带的模块
+                // 是否是自带的模块
             } else if (testType.isFunction(_ToolProtype.defaultModules[module])) {
                 extendObject = _ToolProtype.defaultModules[module]() || {};
             }
             extendPrototype = Object.assign(extendPrototype, extendObject);
         });
         // 更新 environment 上面 _Tool的protype
-        Object.setPrototypeOf(environment._Tool, Object.assign(extendPrototype, _ToolProtype));
+        var extendedPrototype = Object.assign(extendPrototype, _ToolProtype);
+        Object.freeze(extendedPrototype);
+        Object.setPrototypeOf(environment._Tool, extendedPrototype);
     };
 
     // default modules
@@ -150,7 +148,11 @@ function _tool(environment) {
      * arrayArrayFrom
     */
     function polyfill() {
-        
+        function arrayArrayFrom() {
+            Array.from = function (target) {
+                return Array.prototype.slice.call(target);
+            };
+        }
         function objectAssign() {
             var returnObject = {};
             Array.from(arguments).forEach(function (objects) {
@@ -164,26 +166,18 @@ function _tool(environment) {
             });
             return returnObject;
         }
-
-        function arrayArrayFrom() {
-            Array.from = function (target) {
-                return Array.prototype.slice.call(target);
-            };
-        }
-
         // run polyfill
-        Object.assign || objectAssign();
         Array.from || arrayArrayFrom();
+        Object.assign || objectAssign();
         return {};
     }
 
     // init tools
     environment._Tool = new _Tool();
     environment._tool && delete environment._tool;
+    Object.freeze(environment._tool.prototype);
     return environment._Tool;
 }
-
-
 
 // for commonJS and es6 module
 (function (global, _tool) {
