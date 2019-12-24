@@ -60,6 +60,18 @@ typings/
 # next.js build output
 .next
 
+# project config
+.eslintrc.json
+.editorconfig
+package-lock.json
+jest.config.js
+test/
+coverage/
 
-# sandBox
-sandBox/
+# jest config
+
+# webpack config
+config/
+
+# jest
+/test
