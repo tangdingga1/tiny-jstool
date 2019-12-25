@@ -1,5 +1,5 @@
 'use strict';
 
-const Tool = require('./src/Tool');
+const tiny_jstool = require('./src');
 
-module.exports = Tool.default || Tool;
+module.exports = tiny_jstool.default || tiny_jstool;

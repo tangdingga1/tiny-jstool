@@ -1,4 +1,4 @@
-import { isString } from '../packages/src/testType';
+import { isString } from '../packages/testType';
 
 test('test type', () => {
   describe('test isString', () => {
