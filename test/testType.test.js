@@ -1,7 +1,7 @@
-import { isString } from '../packages/testType';
+import { isString } from '../packages/TestType';
 
-test('test type', () => {
-  describe('test isString', () => {
+describe('test isString', () => {
+  test('test type', () => {
     expect(isString('')).toBe(true);
   });
 });
