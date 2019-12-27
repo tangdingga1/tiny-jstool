@@ -3,6 +3,7 @@
         "browser": true,
         "node": true,
         "es6": true,
+        "jest": true
     },
     "extends": "eslint:recommended",
     "globals": {
@@ -10,24 +11,21 @@
         "SharedArrayBuffer": "readonly"
     },
     "parserOptions": {
-        "ecmaVersion": 2015
+        "ecmaVersion": 6,
+        "sourceType": "module"
     },
     "rules": {
-        "indent": [
-            "error",
-            2
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "single"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ]
+        "comma-dangle": ["error", "always-multiline"],
+        "space-before-function-paren": ["error", "never"],
+        "spaced-comment": ["error", "always"],
+        "space-before-blocks": ["error", {
+            "functions": "always",
+            "keywords": "always",
+            "classes": "always"
+        }],
+        "indent": ["error", 2],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "semi": ["error", "always"]
     }
 }

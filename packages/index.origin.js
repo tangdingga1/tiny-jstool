@@ -9,23 +9,23 @@ function _tool(environment) {
    * @variable {function} voidFunction 空函数 用于置空占位
    */
   var _ToolProtype = Object.create(null);
-  var voidFunction = function () { };
+  var voidFunction = function() { };
 
   function _Tool() { }
 
   // common
   _ToolProtype.testType = {
     // basic type
-    isString: function (target) { return typeof target === 'string'; },
-    isNumber: function (target) { return typeof target === 'number'; },
-    isBool: function (target) { return typeof target === 'boolean'; },
-    isUndefined: function (target) { return typeof target === 'undefined'; },
-    isNaN: function (target) { return typeof (target === 'number') && (target !== target); },
-    isNull: function (target) { return typeof (target === 'object') && (target + 1) === 1; },
+    isString: function(target) { return typeof target === 'string'; },
+    isNumber: function(target) { return typeof target === 'number'; },
+    isBool: function(target) { return typeof target === 'boolean'; },
+    isUndefined: function(target) { return typeof target === 'undefined'; },
+    isNaN: function(target) { return typeof (target === 'number') && (target !== target); },
+    isNull: function(target) { return typeof (target === 'object') && (target + 1) === 1; },
     // object type
-    isFunction: function (target) { return typeof target === 'function'; },
-    isArray: function (target) { return Object.prototype.toString.call(target) === '[object Array]'; },
-    isObject: function (target) { return Object.prototype.toString.call(target) === '[object Object]'; }
+    isFunction: function(target) { return typeof target === 'function'; },
+    isArray: function(target) { return Object.prototype.toString.call(target) === '[object Array]'; },
+    isObject: function(target) { return Object.prototype.toString.call(target) === '[object Object]'; },
   };
 
   // define _Tool prototype
@@ -36,7 +36,7 @@ function _tool(environment) {
    * @param {object|function} lifeConfig 生命周期函数设置 如果为obejct { before, after, error }，均传递function， 如果为function，表示回调，第一个参数为err
    * @param {any} that 函数执行需要绑定的作用域，不传递默认为window
     */
-  _ToolProtype.lifeCycleDecorator = function (handler, lifeConfig, that) {
+  _ToolProtype.lifeCycleDecorator = function(handler, lifeConfig, that) {
     var isFunction = this.testType.isFunction;
     if (!isFunction(handler)) {
       throw new Error('you should pass function on first argument');
@@ -67,7 +67,7 @@ function _tool(environment) {
       lifeConfig.after && (onHandlerAfter = lifeConfig.after);
       lifeConfig.error && (onError = lifeConfig.error);
     }
-    return function () {
+    return function() {
       // before
       passValueObject.before = onHandlerBefore();
       var arrArguments = Array.from(arguments);
@@ -85,10 +85,10 @@ function _tool(environment) {
 
   // module extends
   // 自带的模块接收字符串
-  _ToolProtype.extends = function () {
+  _ToolProtype.extends = function() {
     var extendPrototype = {};
     var testType = this.testType;
-    Array.from(arguments).map(function (module) {
+    Array.from(arguments).map(function(module) {
       // 自定义拓展对象
       var extendObject = {};
       if (testType.isObject(module)) {
@@ -122,7 +122,7 @@ function _tool(environment) {
      * @param {string|number} copyText - 需要复制的内容
      * @param {function} callBack - 回调函数，如果出现错误，第一个为参数存在
      */
-    _ToolDom.copyToClipBoard = function (copyText, callBack) {
+    _ToolDom.copyToClipBoard = function(copyText, callBack) {
       var type = typeof copyText;
       if (!document.execCommand) {
         callBack({ err: 'you should update your browser' });
@@ -149,13 +149,13 @@ function _tool(environment) {
   */
   function polyfill() {
     function arrayArrayFrom() {
-      Array.from = function (target) {
+      Array.from = function(target) {
         return Array.prototype.slice.call(target);
       };
     }
     function objectAssign() {
       var returnObject = {};
-      Array.from(arguments).forEach(function (objects) {
+      Array.from(arguments).forEach(function(objects) {
         if (_ToolProtype.testType.isObject(objects)) {
           for (var keys in objects) {
             returnObject[keys] = objects[keys];
@@ -180,7 +180,7 @@ function _tool(environment) {
 }
 
 // for commonJS and es6 module
-(function (global, _tool) {
+(function(global, _tool) {
   if (typeof module === 'object' && typeof module.exports === 'object') {
     module.exports = _tool(global);
   } else {

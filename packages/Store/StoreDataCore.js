@@ -10,7 +10,7 @@ const LISTENER_PROTOTYPE = Object.create(null);
  */
 LISTENER_PROTOTYPE.hasListener = function(name) {
   return !!this[name];
-}
+};
 
 /**
  * @param {String} name ListenerName
@@ -22,7 +22,7 @@ LISTENER_PROTOTYPE.addListener = function(name, handler) {
     this[name].push(handler)
     :
     this[name] = [handler];
-}
+};
 
 /**
  * @param {String} name ListenerName
@@ -33,6 +33,6 @@ LISTENER_PROTOTYPE.dispatchToListener = function(name, value) {
   this.hasListener(name)
   &&
   this[name].forEach(handler => handler({ key: name, value }));
-}
+};
 
 export const LISTENER = Object.create(LISTENER_PROTOTYPE);

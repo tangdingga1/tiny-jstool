@@ -1,28 +1,37 @@
 {
   "name": "tiny-jstool",
   "version": "1.0.0",
-  "description": "simple and tiny tool for JavaScript",
-  "main": "pack/index.js",
+  "description": "light tiny and simple JavaScript tool",
+  "main": "packages/index.js",
   "scripts": {
     "start": "webpack-dev-server --config './config/webpack.config.js'",
-    "test": "jest --coverage"
+    "test": "jest --coverage",
+    "lint": "eslint ./packages/ ./test/"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint && npm run test"
+    }
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/tangdingga1/_Tool.git"
+    "url": "git+https://github.com/tangdingga1/tiny-jstool"
   },
   "keywords": [
     "JavaScript",
-    "Tool"
+    "tool",
+    "store",
+    "type",
+    "error"
   ],
   "author": "tangding",
   "license": "MIT",
   "private": false,
   "email": "tangding12@gmail.com",
   "bugs": {
-    "url": "https://github.com/tangdingga1/_Tool/issues"
+    "url": "https://github.com/tangdingga1/tiny-jstool/issues"
   },
-  "homepage": "https://github.com/tangdingga1/_Tool#readme",
+  "homepage": "https://github.com/tangdingga1/tiny-jstool/blob/master/README.md",
   "devDependencies": {
     "@babel/core": "^7.7.7",
     "@babel/preset-env": "^7.7.7",
@@ -30,6 +39,7 @@
     "babel-loader": "^8.0.6",
     "eslint": "^6.0.1",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^3.1.0",
     "jest": "^24.0.0",
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",

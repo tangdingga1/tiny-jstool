@@ -1,5 +1,5 @@
 import { STORE_DATA_CORE, LISTENER } from './StoreDataCore';
-
+import { transKeyListByKey } from './utils';
 
 // prototype 暴露给外部使用者接口一定要进行类型入参检测
 const STORE_PROTOTYPE = Object.create(null);
@@ -17,8 +17,8 @@ function STORE_PROTOTYPE_SET(key, value) {
     set: function(newValue) {
       STORE_DATA_CORE[key] = newValue;
       LISTENER.dispatchToListener(key, value);
-    }
-  }
+    },
+  };
   Object.defineProperty(this, key, DESCRIPTOR);
   this[key] = value;
 }
@@ -29,7 +29,10 @@ function STORE_PROTOTYPE_SET(key, value) {
  * @param {Any} bindTarget 目标
 */
 function STORE_PROTOTYPE_WATCH(key, watchHandler, bindTarget) {
-  LISTENER.addListener(key, watchHandler.bind(bindTarget));
+  transKeyListByKey(key)
+    .forEach(keyName => {
+      LISTENER.addListener(keyName, watchHandler.bind(bindTarget));
+    });
 }
 
 // @todo warp typeError catcher

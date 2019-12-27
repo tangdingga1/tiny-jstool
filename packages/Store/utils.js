@@ -1,15 +1,15 @@
-import { isArray } from '../testType';
+import { isArray, isString } from '../TestType';
 
 /**
- * @param {Array} list 需要检测的list
- * @param {String} key keyName
+ * @param {String | String[]} key 需要转为数组的key
+ * @return {String[]} keylist
  */
-export function findListenerIndex(list, key) {
-  return list.findIndex(item => {
-    return (
-      item.key === key
-      &&
-      isArray(item.listeners)
-    )
-  });
+export function transKeyListByKey(key) {
+  if (isString(key)) {
+    return [key];
+  }
+  if (isArray(key)) {
+    return key;
+  }
+  return [];
 }
