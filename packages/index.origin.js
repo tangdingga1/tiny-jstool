@@ -34,7 +34,7 @@ function _tool(environment) {
   /** lifeCycleDecorator
    * @param {function} handler 需要进行生命周期装饰的函数，最后一个参数将被添加为生命周期之间互相传递的数值
    * @param {object|function} lifeConfig 生命周期函数设置 如果为obejct { before, after, error }，均传递function， 如果为function，表示回调，第一个参数为err
-   * @param {any} that 函数执行需要绑定的作用域，不传递默认为window
+   * @param {*} that 函数执行需要绑定的作用域，不传递默认为window
     */
   _ToolProtype.lifeCycleDecorator = function(handler, lifeConfig, that) {
     var isFunction = this.testType.isFunction;

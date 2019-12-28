@@ -1,4 +1,4 @@
-import { isArray, isString } from '../TestType';
+import { isArray, isString } from '../TestType/isType';
 
 /**
  * @param {String | String[]} key 需要转为数组的key

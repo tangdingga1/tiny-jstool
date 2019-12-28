@@ -1,8 +1,4 @@
 // use demo
-import { Store } from './index';
+import { TestType } from './index';
 
-Store.watch('name', function({ key, value }) {
-  console.log(key, value);
-});
-
-Store.set('name', 123);
+console.log(TestType.isEqual([], [], []));
