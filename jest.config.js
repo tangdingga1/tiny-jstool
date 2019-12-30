@@ -4,15 +4,15 @@
 module.exports = {
   clearMocks: true,
 
-  coverageDirectory: "<rootDir>/coverage",
+  coverageDirectory: '<rootDir>/coverage',
 
   coveragePathIgnorePatterns: [
-    "/node_modules/"
+    '/node_modules/',
   ],
 
   // An array of directory names to be searched recursively up from the requiring module's location
   // moduleDirectories: [
-  //   "node_modules"
+  //   'node_modules'
   // ],
 
   // An array of file extensions your modules use
@@ -23,15 +23,15 @@ module.exports = {
 
   // A list of paths to directories that Jest should use to search for files in
   // roots: [
-  //   "<rootDir>"
+  //   '<rootDir>'
   // ],
 
-  testEnvironment: "node",
+  testEnvironment: 'node',
   testMatch: ['<rootDir>/test/**/*.js'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: [
-    "/node_modules/"
+    '/node_modules/',
   ],
 
   transform: {
@@ -40,6 +40,6 @@ module.exports = {
 
   // An array of regexp pattern strings that are matched against all source file paths, matched files will skip transformation
   transformIgnorePatterns: [
-    "/node_modules/"
+    '/node_modules/',
   ],
 };

@@ -1,4 +1,4 @@
-import Store from '../packages/Store';
+import { Store } from '../packages';
 
 const TEST_KEY_NAME_A = 'demo1';
 const TEST_KEY_NAME_B = 'demo2';

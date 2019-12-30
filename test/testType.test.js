@@ -12,6 +12,9 @@ const {
   isNaN,
   isObjectType,
   isBasicType,
+  getType,
+  isMatchTypes,
+  isOneOfTypes,
   isSame,
   isEqual,
 } = TestType;
@@ -64,6 +67,44 @@ describe('test isSomeType', () => {
     expect(isNaN(NaN)).toBe(true);
     expect(isNaN(0)).toBe(false);
     expect(isNaN(false)).toBe(false);
+  });
+});
+
+describe('test compareTypes', () => {
+  test('test getType', () => {
+    for (const [value, valueType] of TYPE_BOUNDARY_MAP.entries()) {
+      expect(getType(value)).toBe(valueType);
+    }
+  });
+
+  test('test isMatchTypes', () => {
+    expect(
+      isMatchTypes(['number', 'object', 'function'], [-3, {}, () => {}])
+    ).toBe(true);
+    expect(
+      isMatchTypes(['undefined', 'string', 'boolean'], [undefined, '', true])
+    ).toBe(true);
+    expect(
+      isMatchTypes(['number'], [undefined, '', true])
+    ).toBe(false);
+    expect(
+      isMatchTypes(['undefined', 'any', 'any'], [undefined])
+    ).toBe(true);
+  });
+
+  test('test isOneOfTypes', () => {
+    expect(
+      isOneOfTypes(['number', 'object', 'function'], 3)
+    ).toBe(true);
+    expect(
+      isOneOfTypes('number', 11)
+    ).toBe(true);
+    expect(
+      isOneOfTypes('any', 11)
+    ).toBe(true);
+    expect(
+      isOneOfTypes(['number', 'object', 'function'], null)
+    ).toBe(false);
   });
 });
 

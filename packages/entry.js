@@ -1,4 +1,5 @@
 // use demo
-import { TestType } from './index';
+import { ErrorCatcher, TestType } from './index';
 
-console.log(TestType.isEqual([], [], []));
+
+console.log(ErrorCatcher, TestType);
