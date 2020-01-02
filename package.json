@@ -1,6 +1,6 @@
 {
   "name": "tiny-jstool",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "light tiny and simple JavaScript tool",
   "main": "dist/index.js",
   "scripts": {
@@ -46,8 +46,5 @@
     "webpack": "^4.41.4",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.10.0"
-  },
-  "dependencies": {
-    "tiny-jstool": "^2.0.1"
   }
 }

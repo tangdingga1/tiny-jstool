@@ -6,10 +6,6 @@ module.exports = {
   ...commonPackConfig,
   entry: './packages/index.js',
   mode,
-  optimization: {
-    // namedModules: true,
-    // usedExports: true,
-  },
   output: {
     path: path.resolve(__dirname, '../dist'),
     filename: `tiny-jstool.js`,

@@ -1,6 +1,6 @@
 // use local demo
 // import { ErrorCatcher, TestType, Store } from './index';
 // use npm
-import { ErrorCatcher } from '../dist/';
+import { ErrorCatcher, TestType, Store } from 'tiny-jstool';
 
-console.log(ErrorCatcher);
+console.log(ErrorCatcher, TestType, Store);
