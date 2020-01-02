@@ -21,7 +21,7 @@ tiny-jstool 是一个简单轻便的JavaScript库。秉承精简轻便的概念�
 
 ### 运行时(npm)
 1. 安装包。`npm i -D tiny-jstool`
-2. 引入使用。`import { ErrorCatcher } from 'tiny-jstool';`
+2. 引入使用。`import { ErrorCatcher, TestType, Store } from 'tiny-jstool';`
 
 ## 使用文档
 [DOC.md](https://github.com/tangdingga1/tiny-jstool/blob/master/DOC.md)
