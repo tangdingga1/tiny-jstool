@@ -67,11 +67,15 @@ package-lock.json
 jest.config.js
 test/
 coverage/
-
-# jest config
-
+*.md
+README.md
+babel.config.js
+LICENSE
 # webpack config
 config/
 
 # jest
 /test
+
+# unpacked files
+/packages

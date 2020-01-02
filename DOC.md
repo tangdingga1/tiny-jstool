@@ -159,4 +159,4 @@ catchedDemoFunction('13'); // TypeError `arguments should be number, but now get
 ```
 *其它说明*
 
-当不确定函数入参个数的时候，可以用any扩充。
+当不确定函数入参类型的时候，可以用any扩充。`matchParamsType`只会进行匹配types数量的入参。

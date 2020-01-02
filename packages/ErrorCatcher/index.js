@@ -9,7 +9,8 @@ const ErrorCatcherPrototype = Object.create(null);
  */
 ErrorCatcherPrototype.matchParamsType = function(handler, types) {
   return function(...args) {
-    const error = !TestType.isMatchTypes(types, args);
+    // 只检查type定义的类型数量的入参
+    const error = !TestType.isMatchTypes(types, args.slice(0, types.length));
     if (error) {
       const targetTypes = args.map(param => TestType.getType(param));
       throw new TypeError(

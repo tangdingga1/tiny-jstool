@@ -1,5 +1,6 @@
-// use demo
-import { ErrorCatcher, TestType } from './index';
+// use local demo
+// import { ErrorCatcher, TestType, Store } from './index';
+// use npm
+import { ErrorCatcher } from '../dist/';
 
-
-console.log(ErrorCatcher, TestType);
+console.log(ErrorCatcher);

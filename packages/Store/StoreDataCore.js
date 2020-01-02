@@ -63,4 +63,22 @@ LISTENER_PROTOTYPE.dispatchToListener = function(name, value, preValue) {
   }
 };
 
+/**
+ * @param {String} name ListenerName
+ * @param {Function} removeHandler ListenerHandler
+ * @param {String} type listener type：watch or onChange
+ */
+LISTENER_PROTOTYPE.removeListener = function(name, removeHandler, type) {
+  if (this[name][type]) {
+    const removeHandlerIdx = this[name][type].indexOf(removeHandler);
+    if (removeHandlerIdx > -1) {
+      this[name][type].splice(removeHandlerIdx, 1);
+    }
+  }
+};
+
+LISTENER_PROTOTYPE.clear = function(name) {
+  delete this[name];
+};
+
 export const LISTENER = Object.create(LISTENER_PROTOTYPE);
