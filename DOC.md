@@ -1,5 +1,72 @@
 # 数据流(Store)
-@todo
+`Stroe`模块提供了最简单的观察者模型。你只需要记住，数据源(储存数据的地方)是唯一的，所有的变化监听设置值通过一个字符串的key来作为统一标识。
+
+## &middot; 使用
+1. 引入**Store**模块:
+`import { Store } from 'tiny-jstool';`
+
+2. 通过`set`来设置值，通过`watch`或`onChange`来注册监听函数，通过`key`从`Stroe`上面取值。
+```javascript
+/**
+ * 监听函数入参第一个为对象
+ * @param {String} key 数据唯一标识
+ * @param {*} value 当前更新的值
+ * @param {*} preValue 更新前的值
+ */
+const mockListenerValueAdd = ({ key, value, preValue }) => (42 + value);
+Store.watch('singleListenerKey', mockListenerValueAdd);
+Store.set('singleListenerKey', 20); // mockListenerValueAdd => 62
+Stroe.singleListenerKey; // 20
+```
+3. 通过`clear`来清除数据(包括监听函数)。
+```javascript
+Store.set('willClearKey', 10);
+Store.willClearKey; // 10
+Store.clear('willClearKey');
+Store.willClearKey; // undefined
+```
+## &middot; 注册api
+### 注册监听事件
+- onChange
+- watch
+```javascript
+/**
+ * 注册入参
+ * @param {String | String[]} key 需要监听的key或者keys
+ * @param {Function} watchHandler 触发的方法
+ */
+```
+*其它说明*
+通过`onChange`绑定的监听事件是在值发生变化的时候才触发。`watch`则是每次设置值都会触发。
+
+### 注册值
+- set
+```javascript
+/**
+ * 注册值入参
+ * @param {String} key 需要存储的key值
+ * @param {*} value 需要存储的value值
+ */
+```
+
+## &middot; 清理api
+- removeWatch
+- removeOnChange
+- clear
+
+```javascript
+/**
+ * removeWatch/removeOnChange
+ * 移除对应的注册的事件
+ * @param {string} key
+ * @param {Function} 需要移除的方法
+ */
+ 
+/**
+ * clear，移除key储存的数据以及对应的监听事件
+ * @param {String} key
+ */
+```
 
 # 类型检测(TestType)
 类型检测由`TestType`模块提供，给予了一系列方便的单类型检测以及比较的方法。
